@@ -12,40 +12,25 @@ def getPremiacao():
             resultDict[res['produtor']]['ano'].append(res['ano'])
 
             lenght = len(resultDict[res['produtor']]['ano'])
-            minIntervalAux = res['ano'] - resultDict[res['produtor']]['ano'][lenght-2]
-            maxIntervalAux = res['ano'] - resultDict[res['produtor']]['ano'][0]
+            intervalAux = res['ano'] - resultDict[res['produtor']]['ano'][lenght-2]
 
-            if not resultDict[res['produtor']].get('minInterval'):
-                resultDict[res['produtor']]['minInterval'] = minIntervalAux
-                resultDict[res['produtor']]['minPreviousWin'] = resultDict[res['produtor']]['ano'][lenght-2]
-                resultDict[res['produtor']]['minFollowingWin'] = res['ano']
-                resultDict[res['produtor']]['maxInterval'] = maxIntervalAux
-                resultDict[res['produtor']]['maxPreviousWin'] = resultDict[res['produtor']]['ano'][0]
-                resultDict[res['produtor']]['maxFollowingWin'] = res['ano']
-            else:
-                if minIntervalAux < resultDict[res['produtor']]['minInterval']:
-                    resultDict[res['produtor']]['minInterval'] = minIntervalAux
-                    resultDict[res['produtor']]['minPreviousWin'] = resultDict[res['produtor']]['ano'][lenght-2]
-                    resultDict[res['produtor']]['minFollowingWin'] = res['ano']
-                
-                if maxIntervalAux > resultDict[res['produtor']]['maxInterval']:
-                    resultDict[res['produtor']]['maxInterval'] = maxIntervalAux
-                    resultDict[res['produtor']]['maxPreviousWin'] = resultDict[res['produtor']]['ano'][0]
-                    resultDict[res['produtor']]['maxFollowingWin'] = res['ano']
-
-            if minInterval == None or minInterval > minIntervalAux:
-                minInterval = minIntervalAux
+            if minInterval == None or minInterval > intervalAux:
+                minInterval = intervalAux
             
-            if maxInterval == None or maxInterval < maxIntervalAux:
-                maxInterval = maxIntervalAux
+            if maxInterval == None or maxInterval < intervalAux:
+                maxInterval = intervalAux
     
     retDict = {'max':[], 'min': []}
     
     for k in resultDict:
-        if resultDict[k]['minInterval'] == minInterval:
-            retDict['min'].append({'producer': k, 'interval': minInterval, 'previousWin': resultDict[k]['minPreviousWin'], 'followingWin': resultDict[k]['minFollowingWin']})
+        for x in range(len(resultDict[k]['ano'])):
+            if x != 0:
+                intervalAux = resultDict[k]['ano'][x] - resultDict[k]['ano'][x-1]
 
-        if resultDict[k]['maxInterval'] == maxInterval:
-            retDict['max'].append({'producer': k, 'interval': maxInterval, 'previousWin': resultDict[k]['maxPreviousWin'], 'followingWin': resultDict[k]['maxFollowingWin']})
+                if intervalAux == minInterval:
+                    retDict['min'].append({'producer': k, 'interval': minInterval, 'previousWin': resultDict[k]['ano'][x-1], 'followingWin': resultDict[k]['ano'][x]})
+
+                if intervalAux == maxInterval:
+                    retDict['max'].append({'producer': k, 'interval': maxInterval, 'previousWin': resultDict[k]['ano'][x-1], 'followingWin': resultDict[k]['ano'][x]})
     
     return retDict
