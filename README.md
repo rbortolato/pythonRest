@@ -7,7 +7,7 @@
 
 ## Run
     1. Database
-        $ java -cp .\myApp\database\h2-2.1.212.jar org.h2.tools.Server -tcp -tcpAllowOthers -tcpPort 5234 -baseDir .. -ifNotExists
+        $ java -cp .\myApp\database\h2-2.1.212.jar org.h2.tools.Server -tcp -tcpAllowOthers -tcpPort 5234 -baseDir ./ -ifNotExists
     2. Aplicacao
         $ python run.py
 
